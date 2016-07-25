@@ -3,12 +3,13 @@
 
 {% from "postgres/map.jinja" import postgres with context %}
 
-include:
-  - postgres.restart
-
 {% if postgres.use_upstream_repo %}
 include:
+  - postgres.restart
   - postgres.upstream
+{% else %}
+include:
+  - postgres.restart
 {% endif %}
 
 postgresql-config-dir:
