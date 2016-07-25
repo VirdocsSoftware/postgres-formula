@@ -52,7 +52,6 @@ postgresql-running:
     - enable: True
     - reload: True
     - name: {{ postgres.service }}
-    - reload: true
     - require:
       - cmd: postgresql-cluster-prepared
 
@@ -94,6 +93,12 @@ postgresql-pg_hba:
     - watch_in:
       - service: postgresql-running
 
+postgresql-restarted:
+  cmd.run:
+    - name: "service postgresql restart"
+    - require:
+      - cmd: postgresql-cluster-prepared
+
 {% for name, user in postgres.users.items()  %}
 postgresql-user-{{ name }}:
 {% if user.get('ensure', 'present') == 'absent' %}
@@ -114,6 +119,7 @@ postgresql-user-{{ name }}:
 {% endif %}
     - require:
       - service: postgresql-running
+      - service: postgresql-restarted
 {% endfor %}
 
 {% for name, directory in postgres.tablespaces.items()  %}
