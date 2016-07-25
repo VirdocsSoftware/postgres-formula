@@ -112,7 +112,7 @@ postgresql-user-{{ name }}:
     - superuser: {{ user.get('superuser', False) }}
 {% endif %}
     - require:
-      - cmd: postgresql-restarted
+      - service: postgresql-running
 {% endfor %}
 
 {% for name, directory in postgres.tablespaces.items()  %}
