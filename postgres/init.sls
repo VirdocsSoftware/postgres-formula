@@ -119,7 +119,7 @@ postgresql-user-{{ name }}:
 {% endif %}
     - require:
       - service: postgresql-running
-      - service: postgresql-restarted
+      - cmd: postgresql-restarted
 {% endfor %}
 
 {% for name, directory in postgres.tablespaces.items()  %}
