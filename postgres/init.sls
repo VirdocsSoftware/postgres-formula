@@ -5,11 +5,7 @@
 
 {% if postgres.use_upstream_repo %}
 include:
-  - postgres.restart
   - postgres.upstream
-{% else %}
-include:
-  - postgres.restart
 {% endif %}
 
 postgresql-config-dir:
@@ -117,7 +113,6 @@ postgresql-user-{{ name }}:
 {% endif %}
     - require:
       - cmd: postgresql-restarted
-      - service: postgresql-running
 {% endfor %}
 
 {% for name, directory in postgres.tablespaces.items()  %}
