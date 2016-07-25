@@ -3,6 +3,9 @@
 
 {% from "postgres/map.jinja" import postgres with context %}
 
+include:
+  - postgres.restart
+
 {% if postgres.use_upstream_repo %}
 include:
   - postgres.upstream
@@ -93,12 +96,6 @@ postgresql-pg_hba:
     - watch_in:
       - service: postgresql-running
 
-postgresql-restarted:
-  cmd.run:
-    - name: "service postgresql restart"
-    - require:
-      - cmd: postgresql-cluster-prepared
-
 {% for name, user in postgres.users.items()  %}
 postgresql-user-{{ name }}:
 {% if user.get('ensure', 'present') == 'absent' %}
@@ -118,8 +115,8 @@ postgresql-user-{{ name }}:
     - superuser: {{ user.get('superuser', False) }}
 {% endif %}
     - require:
-      - service: postgresql-running
       - cmd: postgresql-restarted
+      - service: postgresql-running
 {% endfor %}
 
 {% for name, directory in postgres.tablespaces.items()  %}
