@@ -50,7 +50,6 @@ postgresql-cluster-prepared:
 postgresql-running:
   service.running:
     - enable: True
-    - reload: True
     - name: {{ postgres.service }}
     - require:
       - cmd: postgresql-cluster-prepared
