@@ -101,7 +101,6 @@ postgresql-user-{{ name }}:
     - user: {{ user.get('runas', postgres.user) }}
 {% else %}
   postgres_user.present:
-    - refresh_password: True
     - name: {{ name }}
     - createdb: {{ user.get('createdb', False) }}
     - createroles: {{ user.get('createroles', False) }}
