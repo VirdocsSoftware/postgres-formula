@@ -50,18 +50,20 @@ postgresql-cluster-prepared:
 postgresql-running:
   service.running:
     - enable: True
-    - reload: True
+    - full_restart: True
+    - init_delay: 15
     - name: {{ postgres.service }}
     - require:
       - cmd: postgresql-cluster-prepared
 
-restart-postgres:
-  service.mod_watch:
-    - name: {{ postgres.service }}
-    - sfun: running
-    - full_restart: True
-    - require:
-      - service: postgresql-running
+#restart-postgres:
+#  service.mod_watch:
+#    - name: {{ postgres.service }}
+#    - sfun: running
+#    - init_delay: 5
+#    - full_restart: True
+#    - require:
+#      - service: postgresql-running
 
 {% if postgres.pkgs_extra %}
 postgresql-extra-pkgs-installed:
@@ -84,7 +86,6 @@ postgresql-conf:
     {% endif -%}
     - watch_in:
        - service: postgresql-running
-       - service: restart-postgres
     - require:
       - file: postgresql-config-dir
 {% endif %}
@@ -122,7 +123,6 @@ postgresql-user-{{ name }}:
 {% endif %}
     - require:
       - service: postgresql-running
-      - service: restart-postgres
 {% endfor %}
 
 {% for name, directory in postgres.tablespaces.items()  %}
