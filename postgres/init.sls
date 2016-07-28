@@ -95,8 +95,9 @@ postgresql-pg_hba:
 
 restart-postgres:
   service.mod_watch:
-    - full_restart: True
     - name: postgresql
+    - sfun: running
+    - full_restart: True
 
 {% for name, user in postgres.users.items()  %}
 postgresql-user-{{ name }}:
