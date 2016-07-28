@@ -55,6 +55,14 @@ postgresql-running:
     - require:
       - cmd: postgresql-cluster-prepared
 
+restart-postgres:
+  service.mod_watch:
+    - name: {{ postgres.service }}
+    - sfun: running
+    - full_restart: True
+    - require:
+      - service: postgresql-running
+
 {% if postgres.pkgs_extra %}
 postgresql-extra-pkgs-installed:
   pkg.installed:
@@ -76,6 +84,7 @@ postgresql-conf:
     {% endif -%}
     - watch_in:
        - service: postgresql-running
+       - service: restart-postgres
     - require:
       - file: postgresql-config-dir
 {% endif %}
@@ -92,12 +101,6 @@ postgresql-pg_hba:
       - file: postgresql-config-dir
     - watch_in:
       - service: postgresql-running
-
-restart-postgres:
-  service.mod_watch:
-    - name: {{ postgres.service }}
-    - sfun: running
-    - full_restart: True
 
 {% for name, user in postgres.users.items()  %}
 postgresql-user-{{ name }}:
@@ -117,10 +120,9 @@ postgresql-user-{{ name }}:
     - user: {{ user.get('runas', postgres.user) }}
     - superuser: {{ user.get('superuser', False) }}
 {% endif %}
-    - onfail:
-      - service: restart-postgres
     - require:
       - service: postgresql-running
+      - service: restart-postgres
 {% endfor %}
 
 {% for name, directory in postgres.tablespaces.items()  %}
