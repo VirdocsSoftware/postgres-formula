@@ -94,8 +94,8 @@ postgresql-pg_hba:
       - service: postgresql-running
 
 restart-postgres:
-  cmd.run:
-    - name: service postgresql restart
+  service.full_restart:
+    - name: postgresql
 
 {% for name, user in postgres.users.items()  %}
 postgresql-user-{{ name }}:
