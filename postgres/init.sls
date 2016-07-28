@@ -95,7 +95,7 @@ postgresql-pg_hba:
 
 restart-postgres:
   service.mod_watch:
-    - name: postgresql
+    - name: {{ postgres.service }}
     - sfun: running
     - full_restart: True
 
@@ -118,7 +118,7 @@ postgresql-user-{{ name }}:
     - superuser: {{ user.get('superuser', False) }}
 {% endif %}
     - onfail:
-      - cmd: restart-postgres
+      - service: restart-postgres
     - require:
       - service: postgresql-running
 {% endfor %}
