@@ -93,6 +93,10 @@ postgresql-pg_hba:
     - watch_in:
       - service: postgresql-running
 
+restart-postgres:
+  cmd.run:
+    - name: service postgresql restart
+
 {% for name, user in postgres.users.items()  %}
 postgresql-user-{{ name }}:
 {% if user.get('ensure', 'present') == 'absent' %}
@@ -111,6 +115,8 @@ postgresql-user-{{ name }}:
     - user: {{ user.get('runas', postgres.user) }}
     - superuser: {{ user.get('superuser', False) }}
 {% endif %}
+    - onfail:
+      - cmd: restart-postgres
     - require:
       - service: postgresql-running
 {% endfor %}
