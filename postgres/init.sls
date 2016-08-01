@@ -56,6 +56,12 @@ postgresql-running:
     - require:
       - cmd: postgresql-cluster-prepared
 
+wait-30-seconds:
+  cmd.run:
+    - name: sleep 30
+    - require:
+      - cmd: postgresql-cluster-prepared
+
 #restart-postgres:
 #  service.mod_watch:
 #    - name: {{ postgres.service }}
@@ -123,6 +129,7 @@ postgresql-user-{{ name }}:
 {% endif %}
     - require:
       - service: postgresql-running
+      - cmd: wait-30-seconds
 {% endfor %}
 
 {% for name, directory in postgres.tablespaces.items()  %}
