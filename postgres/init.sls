@@ -18,6 +18,10 @@ postgresql-config-dir:
       - pkg: postgresql-installed
       - cmd: postgresql-cluster-prepared
 
+postgresql-config-dir-absent:
+  file.absent:
+    - name: {{ postgres.conf_dir }}
+
 postgresql-installed:
   pkg.installed:
     - name: {{ postgres.pkg }}
@@ -42,6 +46,7 @@ postgresql-cluster-prepared:
       - test -f {{ postgres.data_dir }}/PG_VERSION
     - require:
       - pkg: postgresql-installed
+      - file: postgresql-config-dir-absent
     - env:
       LC_ALL: C.UTF-8
 
