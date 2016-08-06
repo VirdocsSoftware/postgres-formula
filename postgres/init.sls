@@ -60,7 +60,7 @@ wait-30-seconds:
   cmd.run:
     - name: sleep 30
     - require:
-      - cmd: postgresql-cluster-prepared
+      - cmd: postgresql-running
 
 #restart-postgres:
 #  service.mod_watch:
@@ -128,7 +128,7 @@ postgresql-user-{{ name }}:
     - superuser: {{ user.get('superuser', False) }}
 {% endif %}
     - require:
-      - service: postgresql-running
+#      - service: postgresql-running
       - cmd: wait-30-seconds
 {% endfor %}
 
