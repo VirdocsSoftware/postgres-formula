@@ -19,7 +19,7 @@ postgres:
   pg_hba.conf: salt://postgres/pg_hba.conf
   initdb: True
   initdb_user: root
-  initdb_args: --data-checksum
+  initdb_args:
   commands:
     initdb: service postgresql initdb
   user: postgres
