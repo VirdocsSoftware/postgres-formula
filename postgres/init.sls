@@ -21,7 +21,9 @@ postgresql-config-dir:
 postgresql-config-dir-absent:
   file.absent:
     - name: {{ postgres.conf_dir }}
-
+    - unless: 
+      - test -f {{ postgres.data_dir }}/PG_VERSION
+      
 postgresql-installed:
   pkg.installed:
     - name: {{ postgres.pkg }}
