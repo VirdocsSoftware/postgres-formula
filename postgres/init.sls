@@ -33,7 +33,7 @@ postgresql-installed:
 postgresql-cluster-prepared:
   cmd.run:
     {% if postgres.initdb %}
-    - name: {{ postgres.commands.initdb }} {{ postgres.initdb_args }} -d {{ postgres.data_dir }}
+    - name: {{ postgres.commands.initdb }} -d {{ postgres.data_dir }}
     {% elif grains.os_family == 'Debian' %}
     - name: pg_createcluster {{ postgres.version }} main
     {# else: TODO #}
