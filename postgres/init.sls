@@ -16,9 +16,7 @@ postgresql-config-dir:
     - makedirs: True
     - require:
       - pkg: postgresql-installed
-{% if postgres.conf_dir == postgres.data_dir %}
       - cmd: postgresql-cluster-prepared
-{% endif %}
 
 postgresql-installed:
   pkg.installed:
