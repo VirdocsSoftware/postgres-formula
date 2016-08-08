@@ -34,6 +34,17 @@ postgresql-installed:
   {% endif %}
 
 # make sure the data directory and contents have been initialized
+
+{% if postgre.data_dir == '/db/main' %}
+
+chown-db:
+  file.directory: 
+    - name: /db
+    - user: {{ postgres.user }}
+    - group: {{ postgres.group }} 
+
+{% endif %}
+
 postgresql-cluster-prepared:
   cmd.run:
     {% if postgres.initdb %}
