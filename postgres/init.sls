@@ -35,7 +35,7 @@ postgresql-installed:
 
 # make sure the data directory and contents have been initialized
 
-{% if postgre.data_dir == '/db/main' %}
+{% if postgres.data_dir == '/db/main' %}
 
 chown-db:
   file.directory: 
