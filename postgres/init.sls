@@ -78,14 +78,14 @@ wait-30-seconds:
     - require:
       - cmd: postgresql-cluster-prepared
 
-#restart-postgres:
-#  service.mod_watch:
-#    - name: {{ postgres.service }}
-#    - sfun: running
+restart-postgres:
+  service.mod_watch:
+    - name: {{ postgres.service }}
+    - sfun: running
 #    - init_delay: 5
-#    - full_restart: True
-#    - require:
-#      - service: postgresql-running
+    - full_restart: True
+    - require:
+      - service: postgresql-running
 
 {% if postgres.pkgs_extra %}
 postgresql-extra-pkgs-installed:
