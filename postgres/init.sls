@@ -18,11 +18,19 @@ postgresql-config-dir:
       - pkg: postgresql-installed
       - cmd: postgresql-cluster-prepared
 
+kill-postgres:
+  service.dead:
+    - name: {{ postgres.service }}
+    - unless: 
+      - test -f {{ postgres.data_dir }}/PG_VERSION
+
 postgresql-config-dir-absent:
   file.absent:
     - name: {{ postgres.conf_dir }}
     - unless: 
       - test -f {{ postgres.data_dir }}/PG_VERSION
+    - require: 
+      - service: kill-postgres
       
 postgresql-installed:
   pkg.installed:
@@ -78,14 +86,14 @@ wait-30-seconds:
     - require:
       - cmd: postgresql-cluster-prepared
 
-restart-postgres:
-  service.mod_watch:
-    - name: {{ postgres.service }}
-    - sfun: running
+#restart-postgres:
+#  service.mod_watch:
+#    - name: {{ postgres.service }}
+#    - sfun: running
 #    - init_delay: 5
-    - full_restart: True
-    - require:
-      - service: postgresql-running
+#    - full_restart: True
+#    - require:
+#      - service: postgresql-running
 
 {% if postgres.pkgs_extra %}
 postgresql-extra-pkgs-installed:
