@@ -1,4 +1,4 @@
-{% from "postgres/map.jinja" import postgres with context %}
+{% from tpldir + "/map.jinja" import postgres with context %}
 
 postgresql-dead:
   service.dead:
@@ -27,4 +27,6 @@ postgresql-removed:
 
 postgres-dir-absent:
   file.absent:
-    - name: {{ postgres.conf_dir }}
+    - names:
+      - {{ postgres.conf_dir }}
+      - {{ postgres.data_dir }}
