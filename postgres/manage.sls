@@ -1,16 +1,17 @@
 {%- from tpldir + "/map.jinja" import postgres with context -%}
 {%- from tpldir + "/macros.jinja" import format_state with context -%}
 
-{%- if salt['postgres.user_create']|default(none) is not callable %}
-
-# Salt states for managing PostgreSQL is not available,
-# need to provision client binaries first
-
 {%- if postgres.data_dir is defined %}
 {%- set data_dir = postgres.data_dir %}
 {%- else %}
 {%- set data_dir = '/var/lib/postgresql/' + postgres.version + '/main' %}
 {%- endif %}
+
+
+{%- if salt['postgres.user_create']|default(none) is not callable %}
+
+# Salt states for managing PostgreSQL is not available,
+# need to provision client binaries first
 
 include:
   - postgres.client
@@ -32,7 +33,7 @@ postgres-reload-modules:
 {%- for name, user in postgres.users|dictsort() %}
 
 {{ format_state(name, 'postgres_user', user) }}
-      - unless: test -f {{ data_dir }}/wal-e_restore_complete
+    - unless: test -f {{ data_dir }}/wal-e_restore_complete
 {%- endfor %}
 
 # Tablespace states
