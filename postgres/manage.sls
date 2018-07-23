@@ -62,7 +62,7 @@ postgres-reload-modules:
   {%- if 'tablespace' in db %}
       - postgres_tablespace: postgres_tablespace-{{ db.tablespace }}
   {%- endif %}
-
+    - unless: test -f {{ data_dir }}/wal-e_restore_complete
 {%- endfor %}
 
 # Schema states
