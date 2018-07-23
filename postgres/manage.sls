@@ -32,9 +32,7 @@ postgres-reload-modules:
 {%- for name, user in postgres.users|dictsort() %}
 
 {{ format_state(name, 'postgres_user', user) }}
-  {%- if state == 'postgres_user' %}
       - unless: test -f {{ data_dir }}/wal-e_restore_complete
-  {%- endif -%}
 {%- endfor %}
 
 # Tablespace states
